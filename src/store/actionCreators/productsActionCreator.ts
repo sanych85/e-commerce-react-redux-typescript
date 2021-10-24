@@ -1,19 +1,12 @@
 import {
   ProductsActionsType,
   ProductAction,
+  IProduct
 } from './../reducers/productsReducers/ProductsTypes';
 import { Dispatch } from 'redux';
 import axios from 'axios';
 
-interface IProduct {
-    category: string
-    description: string
-    id: number
-    image: string
-    price: number
-    rating: any
-    title: string
-}
+
 export const fetchProducts = () => {
     console.log('we are here')
     return async(dispatch: Dispatch<ProductAction>) => {

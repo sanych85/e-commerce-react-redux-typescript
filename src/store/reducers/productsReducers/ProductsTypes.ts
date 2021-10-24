@@ -5,7 +5,18 @@ export enum ProductsActionsType {
     FETCH_PRODUCTS_FAIL = "FETCH_PRODUCTS_FAIL" 
 }
 
-
+export interface IProduct {
+    category: string
+    description: string
+    id: number
+    image: string
+    price: number
+    rating: {
+        rate:number,
+        count:number 
+    }
+    title: string
+}
 
 export  interface IProducts {
     products: any[]

@@ -8,6 +8,6 @@ import logger from "redux-logger";
 
 export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(ReduxThunk, logger )))
 
-
+export type RootState = ReturnType<typeof store.getState>;
 
  
