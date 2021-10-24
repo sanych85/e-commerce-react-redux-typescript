@@ -5,18 +5,23 @@ interface ISvgWrapper {
     children: React.ReactNode;
     width?: string;
     height?: string;
-    type?: "withQuantity"
+    type?: "svgWithLabel",
+    content?: any
 }
 
 interface ISvgWrapperStyled {
     width?: string;
     height?: string;
-    type?: "withQuantity"
+    type?: "svgWithLabel",
+   
 }
 
-const SvgWrapper:React.FC<ISvgWrapper> = ({children, width, height,type}) => {
+const SvgWrapper:React.FC<ISvgWrapper> = ({children, width, height,type ,content}) => {
+    console.log(typeof(content))
+    
     return (
-        <StyledSvgWrapper type = {type} width = {width} height = {height}>
+        <StyledSvgWrapper type = {type} width = {width} height = {height} >
+            <span>{content}</span>
             {children}
         </StyledSvgWrapper>
     )
@@ -26,8 +31,8 @@ export default SvgWrapper
 
 const StyledSvgWrapper = styled.div<ISvgWrapperStyled> `
     position: relative;
- &:before {
-        content: "1";
+
+    span {
         position: absolute;
         /* display: grid;
         align-self:center; */
@@ -40,6 +45,7 @@ const StyledSvgWrapper = styled.div<ISvgWrapperStyled> `
         z-index:999;
         text-align: center;
     }
+
 svg {
     
     width: ${({width})=> width || "36px"};

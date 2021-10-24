@@ -6,7 +6,7 @@ import { SvgWrapper } from '.';
 const HeaderCart = () => {
     return (
         <StyledHeaderCart>
-            <SvgWrapper><AiOutlineShoppingCart/></SvgWrapper>
+            <SvgWrapper type = "svgWithLabel" content = "1"><AiOutlineShoppingCart/></SvgWrapper>
         </StyledHeaderCart>
     )
 }
