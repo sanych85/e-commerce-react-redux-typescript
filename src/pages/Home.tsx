@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import LeftAside from '../components/LeftAside'
 const Home = () => {
     const products = useSelector<RootState, IProduct[]>(state=>state.products.products)
+    const loading = useSelector<RootState, boolean>(state=>state.products.loading)
     console.log(products)
     const dispatch = useDispatch()
     useEffect(()=> {
@@ -19,7 +20,7 @@ const Home = () => {
     return (
         <Main>
             <LeftAside/> 
-            <ProductsList products = {products}/> 
+            <ProductsList products = {products} loading= {loading}/> 
             <div></div>
         </Main>
     )

@@ -6,11 +6,15 @@ import styled from 'styled-components';
 
 export interface IProductList {
    products: IProduct[]
+   loading: boolean
 }
 
 
-const ProductsList:React.FC<IProductList> = ({products}) => { 
+const ProductsList:React.FC<IProductList> = ({products, loading}) => { 
     console.log(products)
+    if(loading) {
+        return <div>Loading</div>
+    }
     return (
         <StyledUl> 
             {products.map(product=> <ProductItem key = {product.id} {...product}></ProductItem>)}
