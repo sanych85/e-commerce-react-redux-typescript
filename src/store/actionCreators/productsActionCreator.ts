@@ -14,7 +14,12 @@ export const fetchProducts = () => {
         console.log('gdfgfd')
         try {
             const {data} = await  axios.get<IProduct[]>('https://fakestoreapi.com/products/')
+            data.map(item=> {
+                item.quantity = 0
+                return item
+            })
             console.log(data)
+            
             dispatch({type:ProductsActionsType.FETCH_PRODUCTS_SUCCESS, payload:data}) 
             
         }

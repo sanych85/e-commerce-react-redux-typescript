@@ -2,16 +2,19 @@ import React from 'react';
 import { IProduct } from '../store/reducers/productsReducers/ProductsTypes';
 import styled from 'styled-components';
 import { MdOutlineStarRate,MdPeopleAlt } from 'react-icons/md';
+import { AddToCart } from '.';
 
 
-const ProductItem: React.FC<IProduct> = ({
-  category,
-  description,
-  image,
-  price,
-  rating,
-  title,
-}) => {
+
+const ProductItem: React.FC<IProduct> = (
+product) => {
+
+  const {category,
+    description,
+    image,
+    price,
+    rating,
+    title} = product 
   return (
     <StyledLi>
       <StyledFigure>
@@ -32,6 +35,8 @@ const ProductItem: React.FC<IProduct> = ({
             <Count>{rating.count} <MdPeopleAlt/></Count>
         </RatingWrapper>
       </AdditionalInfo>
+      <AddToCart {...product}/>
+      
     </StyledLi>
   );
 };

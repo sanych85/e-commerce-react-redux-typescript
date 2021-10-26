@@ -2,12 +2,12 @@ import { IProducts, ProductAction,ProductsActionsType } from "./ProductsTypes"
 
 const initialState:IProducts = {
     products:[],
-    loading: false,
-    error: ''
+    loading: false, 
+    error: '' 
 }
 
 
-export const  productsReducer = (state=initialState, action:ProductAction):IProducts=> {
+export const  productsReducer = (state=initialState, action:ProductAction):IProducts => {
     switch(action.type) {
         case ProductsActionsType.FETCH_PRODUCTS_START:  {
             return  {

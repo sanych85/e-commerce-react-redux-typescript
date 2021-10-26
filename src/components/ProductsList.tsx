@@ -16,9 +16,11 @@ const ProductsList:React.FC<IProductList> = ({products, loading}) => {
         return <div>Loading</div>
     }
     return (
-        <StyledUl> 
-            {products.map(product=> <ProductItem key = {product.id} {...product}></ProductItem>)}
-        </StyledUl>
+        <section>
+            <StyledUl>
+                {products.map(product=>  <ProductItem key = {product.id} {...product}></ProductItem>)}
+            </StyledUl>
+        </section>
     )
 }
 
@@ -29,3 +31,5 @@ const StyledUl = styled.ul `
   grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
 `
+
+

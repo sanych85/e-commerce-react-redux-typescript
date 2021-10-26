@@ -6,16 +6,18 @@ export enum ProductsActionsType {
 }
 
 export interface IProduct {
-    category: string
-    description: string
-    id: number
-    image: string
-    price: number
+    category: string;
+    description: string;
+    id: number;
+    image: string; 
+    price: number;
     rating: {
         rate:number,
-        count:number 
+        count:number   
     }
-    title: string
+    title: string 
+    [key: string]: any
+    // quantity?:string
 }
 
 export  interface IProducts {
