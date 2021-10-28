@@ -17,6 +17,7 @@ export interface IProduct {
     }
     title: string 
     [key: string]: any
+    quantity?:number
     // quantity?:string
 }
 

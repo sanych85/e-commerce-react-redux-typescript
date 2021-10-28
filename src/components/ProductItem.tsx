@@ -46,7 +46,7 @@ export default ProductItem;
 const StyledLi = styled.li`
   display: grid;
   list-style: none;
-  gap: 1rem;
+
   background: #dee7ed;
   align-items: end;
   padding-left: 1.5rem;
@@ -56,17 +56,25 @@ const StyledLi = styled.li`
   box-shadow: 7px 5px 5px #dfd7da;
 `;
 
-const StyledFigure = styled.figure``;
+const StyledFigure = styled.figure`
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+`;
 
 const StyledFigcaption = styled.figcaption`
+  margin-top: 1rem;
   font-size: 1.3rem;
   text-transform: uppercase;
   text-align: center;
+ 
 `;
 
 const StyledImage = styled.img`
-  width: 350px;
-  height: 400px;
+  width: 270px;
+  height: 300px;
+
   border-radius: 10px;
 `;
 
@@ -77,7 +85,7 @@ const AdditionalInfo = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: 1fr 1fr;
   justify-content: space-around;
-  padding-bottom: 2rem;
+
   svg {
     height: 20px;
     width: 20px;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'; 
 import Home from './pages/Home';
-import Cart from './pages/Cart';
+import Cart from './pages/CartPage';
 import NotFound from './pages/NotFound';
 import SingleItem from './pages/SingleItem';
 import { Header } from './components';
