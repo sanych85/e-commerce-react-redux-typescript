@@ -21,7 +21,7 @@ product) => {
         <StyledImage src={image}></StyledImage>
         <StyledFigcaption>{title}</StyledFigcaption>
       </StyledFigure>
-      <Description>{description}</Description>
+      <Description>{description.charAt(0).toUpperCase() + description.slice(1)}</Description>
 
       <AdditionalInfo>
         <Category>{category}</Category>

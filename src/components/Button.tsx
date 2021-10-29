@@ -60,9 +60,10 @@ const StyledButton = styled.button<IStyledButton>`
   text-transform: uppercase;
   color: ${({ color }) => color || ''};
   background-color: ${({ bgColor }) => bgColor || ''};
-  margin-bottom: ${({ marginBottom }) => marginBottom || ''};
+  
   padding: 7px 10px;
   margin: 0 auto 1rem;
+  margin-bottom: ${({ marginBottom }) => marginBottom || ''};
   transition: all ease 0.6s;
   &:hover {
       cursor: pointer;

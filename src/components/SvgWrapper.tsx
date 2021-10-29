@@ -44,6 +44,7 @@ const StyledSvgWrapper = styled.div<ISvgWrapperStyled> `
         background-color: #ac7fff;
         z-index:999;
         text-align: center;
+        color:white;
     }
 
 svg {

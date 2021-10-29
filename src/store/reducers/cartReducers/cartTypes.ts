@@ -1,7 +1,9 @@
 import { IProduct } from './../productsReducers/ProductsTypes';
 export enum CartActionsType {
-    ADD_ITEM_TO_CART= "ADD_ITEM_TO_CART",
+    INCREASE_ITEM_IN_CART= "INCREASE_ITEM_IN_CART",
+    DECREASE_ITEM_IN_CART = "DECREASE_ITEM_IN_CART",
     DELETE_ITEM_FROM_CART = "DELETE_ITEM_FROM_CART"
+
 }
 
 export interface ICart { 
@@ -13,7 +15,7 @@ export interface ICart {
 
 
 export interface ICartAction {
-    type: CartActionsType.ADD_ITEM_TO_CART | CartActionsType.DELETE_ITEM_FROM_CART,
+    type: CartActionsType.INCREASE_ITEM_IN_CART | CartActionsType.DECREASE_ITEM_IN_CART | CartActionsType.DELETE_ITEM_FROM_CART,
     payload: IProduct
 }
 

@@ -18,7 +18,7 @@ export const cartReducer = (
   action: ICartAction
 ): ICart => {
   switch (action.type) {
-    case CartActionsType.ADD_ITEM_TO_CART: {
+    case CartActionsType.INCREASE_ITEM_IN_CART: {
       const findItem = state.products.find(
         (item: IProduct) => item.id === action.payload.id
       );
@@ -29,7 +29,7 @@ export const cartReducer = (
           ...state,
           products: newItem,
           totalQuantity: calculateCartQuantity(newItem),
-          totalPrice: calculateTotalPrice(newItem)
+          totalPrice: calculateTotalPrice(newItem),
         };
       } else {
         console.log('in else');
@@ -38,35 +38,31 @@ export const cartReducer = (
           ...state,
           products: newArray,
           totalQuantity: calculateCartQuantity(newArray),
-          totalPrice:calculateTotalPrice(newArray)
+          totalPrice: calculateTotalPrice(newArray),
         };
       }
     }
-    case CartActionsType.DELETE_ITEM_FROM_CART: {
+    case CartActionsType.DECREASE_ITEM_IN_CART: {
       const newItem = deleteItem(state.products, action.payload);
       return {
         ...state,
         products: newItem,
         totalQuantity: calculateCartQuantity(newItem),
-        totalPrice: calculateTotalPrice(newItem)
+        totalPrice: calculateTotalPrice(newItem),
       };
+    }
 
-      // filter((item:IProduct):IProduct | null  => {
-      //     if(item.id===action.payload.id ) {
-      //         if(item && item.quantity&& item.quantity > 1) {
-      //             return {
-      //                 ...item, quantity: item && item.quantity && item.quantity-1
-      //             }
-      //         }
-      //         else {
-      //             return null
-      //         }
-
-      //     }
-      //     else {
-      //         return item
-      //     }
-      // })
+    case CartActionsType.DELETE_ITEM_FROM_CART: {
+      console.log('action.payload', action.payload);
+      const newItem = state.products.filter(
+        (item: IProduct) => item.id !== action.payload.id
+      )
+      return {
+        ...state,
+        products: newItem,
+        totalQuantity: calculateCartQuantity(newItem),
+        totalPrice: calculateTotalPrice(newItem),
+      };
     }
     default:
       return state;

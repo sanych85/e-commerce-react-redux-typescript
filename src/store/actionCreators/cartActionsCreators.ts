@@ -1,9 +1,13 @@
 import { IProduct } from './../reducers/productsReducers/ProductsTypes';
 import { CartActionsType } from './../reducers/cartReducers/cartTypes';
 
-export const addItemToCart = (data:IProduct)=> {
-    return {type:CartActionsType.ADD_ITEM_TO_CART, payload: data}
+export const increaseCountInCart= (data:IProduct)=> {
+    return {type:CartActionsType.INCREASE_ITEM_IN_CART, payload: data}
 }
+export const decreaseCountInCart = (data:IProduct)=> {
+    return {type:CartActionsType.DECREASE_ITEM_IN_CART, payload: data}
+}
+
 export const removeItemFromCart = (data:IProduct)=> {
-    return {type:CartActionsType.DELETE_ITEM_FROM_CART, payload: data}
+    return {type:CartActionsType.DELETE_ITEM_FROM_CART, payload:data}
 }
