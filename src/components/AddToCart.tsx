@@ -17,8 +17,7 @@ const AddToCart: React.FC<IProduct> = (product) => {
   const cart = useSelector<RootState, ICart>((state) => state.cart);
 
   const { products } = cart;
-  // console.log(product, "product")
-  // console.log("products", products)
+
 
   const cartItem = products.find((item: IProduct) => item.id === product.id);
 

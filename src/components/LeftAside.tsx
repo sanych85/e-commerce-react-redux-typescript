@@ -1,52 +1,140 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { IProduct } from '../store/reducers/productsReducers/ProductsTypes';
 import { RootState } from '../store/store';
+import { TwoThumbInputRange } from 'react-two-thumb-input-range';
+import { filterItems } from '../store/actionCreators/filterActionCreators';
+
 
 interface StyledInputRange {
-  variant?: "range";
-  max?:number 
+  variant?: 'range';
+  max?: number;
 }
 
-const LeftAside = () => {
-  
+interface ICategory {
+  name: string;
+  checked: boolean;
+}
+
+interface IFilterState {
+  price: [number, number];
+  searchValue: string;
+  category: any;
+}
+
+export enum Filterscategory {
+  category = 'category',
+  search = 'search',
+  price = 'price',
+}
+
+export type Filter = 'category' | 'search' | 'price';
+
+const LeftAside: React.FC = () => {
+  const dispatch = useDispatch()
   const products = useSelector<RootState, IProduct[]>(
     (state) => state.products.products
   );
-  const [inputValue, setInputValue] = useState<string>('')
+
+  const maxPrice: number = Math.round(
+    products.map((item) => item.price).sort((a, b) => b - a)[0]
+  );
   const options: string[] = [
     ...new Set(products.map((item: IProduct): string => item.category)),
   ];
-  const maxPrice = products.map((item) => item.price).sort((a, b) => b - a)[0];
-  console.log(maxPrice);
-  const changeInput =(e:React.FormEvent<HTMLInputElement>)=> { 
-    console.log(e.currentTarget.value)
-    setInputValue(e.currentTarget.value)
+
+  const category = options.reduce((total: any, item): ICategory => {
+    total[item] = false;
+    return total;
+  }, {});
+
+  const [inputValue, setInputValue] = useState<string>('');
+  const [inputState, setInputState] = useState<IFilterState>({
+    price: [0, 0],
+    searchValue: '',
+    category: category,
+  });
+
+  
+
+  const [value, setValue] = useState<[number, number]>([0, maxPrice | 200]);
+  const stateItem = {
+    searchValue: '', 
+    category: category,
   }
+
+  const changeInput = (e: React.FormEvent<HTMLInputElement>, type: Filter, 
+    ) => {
+    if (type === 'search') {
+      setInputState({ ...inputState, searchValue: e.currentTarget.value });
+    } else if (type === 'category') {
+      setInputState({
+        ...inputState,
+        category: {
+          ...inputState.category,
+          [e.currentTarget.value]: !inputState.category[e.currentTarget.value],
+        },
+      });
+    } else if (type === 'price') {
+      
+    }
+    // setInputValue(e.currentTarget.value);
+    dispatch(filterItems({type, value: e.currentTarget.value}))
+    console.log(inputState, "inputState")
+    console.log("nowDispatch")
+  };
+
+
+  const changePrice = (values: any) => {
+    setValue(values);
+  };
   return (
-    <StyledAside>
-      <fieldset>
-        <InputWrapper >
-          <Input type="text" value={inputValue} placeholder="Search" onChange = {changeInput}></Input>
-          <Label></Label>
-        </InputWrapper>
-        <InputWrapper>
-          <Select>
-            <option value="Choose category" disabled>Choose category</option>
-            {options.map((option, i) => (
-              <option value={option} key={i}>
-                {option}
-              </option>
-            ))}
-          </Select>
-        </InputWrapper>
-        <InputWrapper variant = "range" max={maxPrice}> 
-          <Input type="range" min="0" max={maxPrice}  ></Input>
-          
-        </InputWrapper>
-      </fieldset>
-    </StyledAside>
+    <>
+      {products && products.length > 0 && maxPrice && (
+        <StyledAside>
+          <fieldset>
+            <InputWrapper>
+              <Input
+                id="search"
+                type="text"
+                placeholder="Search"
+                value={inputState.searchValue}
+                onChange={(e) => changeInput(e, 'search')}></Input>
+              <Label htmlFor="search"></Label>
+            </InputWrapper>
+            <InputWrapper>
+              <Legend>Choose category</Legend>
+              {options.map((option, index) => {
+                return (
+                  <CheckboxWrapper key={index}>
+                    <Input
+                      type="checkbox"
+                      onChange={(e) => changeInput(e, 'category')}
+                      name={option}
+                      value={option}
+                      id={option}
+                    />
+                    <Label htmlFor={option}>{option}</Label>
+                  </CheckboxWrapper>
+                );
+              })}
+            </InputWrapper>
+            <InputWrapper>
+              {/* <Input id="" type="range" min={+price.minPrice} max={+price.maxPrice}  ></Input>
+          <Input id="min" value = {price.minPrice} onChange = {(e)=>changePrice(e,"minPrice")}></Input>
+          <Input id="max" value = {price.maxPrice} onChange = {(e)=>changePrice(e,"maxPrice")}></Input> */}
+              <TwoThumbInputRange
+                onChange={changePrice}
+                values={value}
+                min={0}
+                max={+`${maxPrice | 0}`}
+              />
+            </InputWrapper>
+          </fieldset>
+        </StyledAside>
+      )}
+    </>
   );
 };
 
@@ -55,36 +143,54 @@ export default LeftAside;
 const StyledAside = styled.aside`
   display: flex;
   justify-content: center;
+  .css-j8gyih-TwoThumbInputRange {
+    margin-top: 3rem;
+    output {
+      /* width: 36px;
+    height: 18px; */
+      top: -25px;
+      &:nth-child(1) {
+        /* left: calc(0% - 16px);  */
+      }
+    }
+  }
 `;
 
-const InputWrapper = styled.div <StyledInputRange>`
+const InputWrapper = styled.div<StyledInputRange>`
   margin-top: 1rem;
   position: relative;
-  &:after, &:before {
-    content: ${({ variant,max})=> `"${variant==="range"?max:''} "`}; 
+  &:after,
+  &:before {
+    content: ${({ variant, max }) => `"${variant === 'range' ? max : ''} "`};
     position: absolute;
     bottom: -10px;
     font-size: 0.9rem;
-
   }
   &:before {
-    content: ${({ variant,max})=> `"${variant==="range"?0:''} "`}; 
-    left:0;
+    content: ${({ variant, max }) => `"${variant === 'range' ? 0 : ''} "`};
+    left: 0;
   }
   &:after {
-    
     right: 0;
   }
 `;
 
-const Input = styled.input`  
+const Input = styled.input`
   width: 100%;
 `;
 
-const Label = styled.label`
-
-`;
+const Label = styled.label``;
 
 const Select = styled.select`
   width: 80%;
+`;
+
+const CheckboxWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  margin-bottom: 0.5rem;
+`;
+
+const Legend = styled.legend`
+  margin-bottom: 0.5rem;
 `;

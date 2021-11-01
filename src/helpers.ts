@@ -33,7 +33,7 @@ export const deleteItem = (array: IProduct[], payload: IProduct):IProduct[] => {
     else {
         total.push({...item})
     }
-    console.log(total)
+   
     return total
     
 

@@ -17,7 +17,7 @@ interface ISvgWrapperStyled {
 }
 
 const SvgWrapper:React.FC<ISvgWrapper> = ({children, width, height,type ,content}) => {
-    console.log(typeof(content))
+
     
     return (
         <StyledSvgWrapper type = {type} width = {width} height = {height} >

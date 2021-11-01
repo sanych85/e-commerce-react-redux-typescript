@@ -23,7 +23,7 @@ export const cartReducer = (
         (item: IProduct) => item.id === action.payload.id
       );
       const newItem = addNewItem(state.products, action.payload);
-      console.log(newItem);
+  
       if (findItem) {
         return {
           ...state,
@@ -32,7 +32,7 @@ export const cartReducer = (
           totalPrice: calculateTotalPrice(newItem),
         };
       } else {
-        console.log('in else');
+
         const newArray = [...state.products, action.payload];
         return {
           ...state,
