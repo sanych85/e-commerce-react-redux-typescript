@@ -5,6 +5,8 @@ import { IProduct } from '../store/reducers/productsReducers/ProductsTypes';
 import { RootState } from '../store/store';
 import { TwoThumbInputRange } from 'react-two-thumb-input-range';
 import { filterItems } from '../store/actionCreators/filterActionCreators';
+import { getCategory, getMaxPrice, getOptions } from '../helpers';
+import { IFilterItems } from '../store/reducers/filterReducer/filterTypes';
 
 
 interface StyledInputRange {
@@ -12,10 +14,7 @@ interface StyledInputRange {
   max?: number;
 }
 
-interface ICategory {
-  name: string;
-  checked: boolean;
-}
+
 
 interface IFilterState {
   price: [number, number];
@@ -29,25 +28,19 @@ export enum Filterscategory {
   price = 'price',
 }
 
-export type Filter = 'category' | 'search' | 'price';
+export type Filter = 'category' | 'text' | 'price';
 
 const LeftAside: React.FC = () => {
   const dispatch = useDispatch()
   const products = useSelector<RootState, IProduct[]>(
     (state) => state.products.products
   );
-
-  const maxPrice: number = Math.round(
-    products.map((item) => item.price).sort((a, b) => b - a)[0]
-  );
-  const options: string[] = [
-    ...new Set(products.map((item: IProduct): string => item.category)),
-  ];
-
-  const category = options.reduce((total: any, item): ICategory => {
-    total[item] = false;
-    return total;
-  }, {});
+  const {text} = useSelector<RootState, IFilterItems>(state=>state.filter.filters) 
+    console.log("text", text) 
+  const maxPrice = getMaxPrice(products)
+  const options = getOptions(products) 
+  const category = getCategory(options)
+  
 
   const [inputValue, setInputValue] = useState<string>('');
   const [inputState, setInputState] = useState<IFilterState>({
@@ -64,23 +57,36 @@ const LeftAside: React.FC = () => {
     category: category,
   }
 
-  const changeInput = (e: React.FormEvent<HTMLInputElement>, type: Filter, 
+  const changeInput = (e: React.FormEvent<HTMLInputElement>, variant: Filter, 
     ) => {
-    if (type === 'search') {
-      setInputState({ ...inputState, searchValue: e.currentTarget.value });
-    } else if (type === 'category') {
-      setInputState({
-        ...inputState,
-        category: {
-          ...inputState.category,
-          [e.currentTarget.value]: !inputState.category[e.currentTarget.value],
-        },
-      });
-    } else if (type === 'price') {
+    // if (type === 'search') {
+    //   setInputState({ ...inputState, searchValue: e.currentTarget.value });
+    // } else if (type === 'category') {
+    //   setInputState({
+    //     ...inputState,
+    //     category: {
+    //       ...inputState.category,
+    //       [e.currentTarget.value]: !inputState.category[e.currentTarget.value],
+    //     },
+    //   });
+    // } else if (type === 'price') {
       
-    }
+    // }
     // setInputValue(e.currentTarget.value);
-    dispatch(filterItems({type, value: e.currentTarget.value}))
+      
+      
+      if(variant === "text") {
+        const value = e.currentTarget.value
+        dispatch(filterItems({variant, value, products}))
+      }
+      else if(variant ==="category") {
+    
+        const value = e.currentTarget.name
+        console.log("value" , value)
+        dispatch(filterItems({variant, value, products})) 
+      }
+  
+    
     console.log(inputState, "inputState")
     console.log("nowDispatch")
   };
@@ -99,8 +105,8 @@ const LeftAside: React.FC = () => {
                 id="search"
                 type="text"
                 placeholder="Search"
-                value={inputState.searchValue}
-                onChange={(e) => changeInput(e, 'search')}></Input>
+                value={text}
+                onChange={(e) => changeInput(e, 'text')}></Input>
               <Label htmlFor="search"></Label>
             </InputWrapper>
             <InputWrapper>

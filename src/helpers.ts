@@ -1,4 +1,13 @@
+
+
 import { IProduct } from './store/reducers/productsReducers/ProductsTypes';
+
+
+interface ICategory {
+  name?: string;
+  checked?: boolean;
+}
+
 
 export const addNewItem = (array: IProduct[], payload: IProduct):IProduct[] => {
   return array.map((item:IProduct):IProduct => {
@@ -59,4 +68,24 @@ export const  calculateTotalPrice =(array: IProduct[]):number=> {
     }
     return total
   },0)
+}
+
+
+export const getCategory = (options:string[])=> {
+  return  options.reduce((total: any, item:string): ICategory => {
+    total[item] = false;
+    return total; 
+  }, {});
+}
+
+
+export const getOptions = (products:IProduct[])=> {
+  return   [...new Set(products.map((item: IProduct): string => item.category)),
+  ];
+}
+
+export const getMaxPrice = (products:IProduct[])=> {
+  return Math.round(
+    products.map((item) => item.price).sort((a, b) => b - a)[0]
+  );
 }

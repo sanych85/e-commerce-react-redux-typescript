@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import LeftAside from '../components/LeftAside'
 const Home = () => {
     const products = useSelector<RootState, IProduct[]>(state=>state.products.products)
+    const filteredProducts = useSelector<RootState, IProduct[]>(state=>state.filter.filteredProducts)
     const loading = useSelector<RootState, boolean>(state=>state.products.loading)
     console.log(products)
     const dispatch = useDispatch()
@@ -20,7 +21,7 @@ const Home = () => {
     return (
         <Main>
             <LeftAside/> 
-            <ProductsList products = {products} loading= {loading}/> 
+            <ProductsList products = {filteredProducts} loading= {loading}/> 
             <div></div>
         </Main>
     )
