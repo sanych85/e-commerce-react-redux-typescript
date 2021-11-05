@@ -28,14 +28,17 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
     }
     case FilterActionsEnum.FILTER_ITEMS: {
       console.log('Action paylaod', action.payload.value);
-      let updatedFilters = { ...state.filters };
+      let updatedFilters = { ...state.filters }; 
       if (action.payload.variant === 'text') {
+        console.log("in if")
         updatedFilters = {
           ...state.filters,
           text: action.payload.value,
         };
         console.log(updatedFilters, 'updated filters');
+      
       } else if (action.payload.variant === 'category') {
+        console.log("inelse ")
         updatedFilters = {
           ...state.filters,
           category: {
@@ -58,7 +61,7 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
             console.log(action.payload.value)
             if(updatedFilters.text!=="")  {
               
-              return product.title.toLowerCase().startsWith(action.payload.value);
+              return product.title.toLowerCase().startsWith(updatedFilters.text);
             }
             else {
             
@@ -73,16 +76,18 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
             console.log("in if")
             
            filteredCategories.forEach((category:string)=> {
-              const filtersByCategoryItems = filteredProducts.filter(item=>item.category===category)
+              const filtersByCategoryItems = filteredProducts.filter((item:IProduct)=>item.category===category)
               console.log(filtersByCategoryItems, "filteredProducts")
               filteredArray = [...filteredArray, ...filtersByCategoryItems]
              console.log(filteredArray) 
              
            })
+           filteredArray.filter((elem:IProduct)=>elem.price <= state.filters.maxPrice)
+           console.log(filteredArray, "filtered after price")
            
           }else {
             console.log("in else")
-            filteredArray  = filteredProducts 
+            filteredArray  = filteredProducts.filter((elem:IProduct)=>elem.price <= state.filters.maxPrice)
           }
    
           console.log(filteredArray, "final filter") 
@@ -90,9 +95,6 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
         
       };
      
-      // console.log(updatedState(), "glbal update state")
-      
- 
       return {
         ...state,
         filters: updatedFilters,
