@@ -52,10 +52,7 @@ const LeftAside: React.FC = () => {
   
 
   const [value, setValue] = useState<[number, number]>([0, maxPrice | 200]);
-  const stateItem = {
-    searchValue: '', 
-    category: category,
-  }
+
 
   const changeInput = (e: React.FormEvent<HTMLInputElement>, variant: Filter, 
     ) => {
@@ -85,6 +82,11 @@ const LeftAside: React.FC = () => {
         console.log("value" , value)
         dispatch(filterItems({variant, value, products})) 
       }
+
+      // else if(variant === "price") {
+      //   const value =[]
+      //   dispatch(filterItems({variant, value}))
+      // }
   
     
     console.log(inputState, "inputState")
@@ -93,6 +95,9 @@ const LeftAside: React.FC = () => {
 
 
   const changePrice = (values: any) => {
+    const value = values
+    const variant = "price"
+    dispatch(filterItems({variant, value, products}))
     setValue(values);
   };
   return (

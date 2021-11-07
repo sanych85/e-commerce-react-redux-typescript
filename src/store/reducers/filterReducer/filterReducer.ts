@@ -48,6 +48,13 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
           },
         };
       }
+      else if (action.payload.variant === 'price') {
+        console.log(action.payload, "action payload in price")
+        updatedFilters = {
+          ...state.filters,
+        minPrice: action.payload.value[0], maxPrice:action.payload.value[1]
+        };
+      }
 
    
       const updatedState = () => {
@@ -60,11 +67,9 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
           (product: IProduct): IProduct | boolean   => {
             console.log(action.payload.value)
             if(updatedFilters.text!=="")  {
-              
               return product.title.toLowerCase().startsWith(updatedFilters.text);
             }
             else {
-            
               return product
             }
             
@@ -79,17 +84,22 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
               const filtersByCategoryItems = filteredProducts.filter((item:IProduct)=>item.category===category)
               console.log(filtersByCategoryItems, "filteredProducts")
               filteredArray = [...filteredArray, ...filtersByCategoryItems]
-             console.log(filteredArray) 
-             
            })
-           filteredArray.filter((elem:IProduct)=>elem.price <= state.filters.maxPrice)
-           console.log(filteredArray, "filtered after price")
-           
-          }else {
-            console.log("in else")
-            filteredArray  = filteredProducts.filter((elem:IProduct)=>elem.price <= state.filters.maxPrice)
+          //  filteredArray.filter((elem:IProduct)=>elem.price <= state.filters.maxPrice)
+          //  console.log(filteredArray, "filtered after price")
+           console.log(filteredArray, "filtered after categories")
           }
-   
+          // else {
+          //   console.log("in else")
+          //   filteredArray  = filteredProducts.filter((elem:IProduct)=> {
+          //     console.log(elem.price)
+          //     return elem.price <= state.filters.maxPrice && elem.price>=state.filters.minPrice
+          //   })
+          // }
+          filteredArray  = filteredArray.filter((elem:IProduct)=> {
+            console.log(elem.price)
+            return elem.price <= state.filters.maxPrice && elem.price>=state.filters.minPrice
+          })
           console.log(filteredArray, "final filter") 
         return filteredArray
         
