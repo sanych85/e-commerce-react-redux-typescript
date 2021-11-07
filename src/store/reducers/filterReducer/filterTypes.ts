@@ -2,7 +2,7 @@
 import { IProduct } from './../productsReducers/ProductsTypes';
 
 export interface IFilter {
-  products: [];
+  products: IProduct[];
   filteredProducts: IProduct[];
   filters: {
     text: string;

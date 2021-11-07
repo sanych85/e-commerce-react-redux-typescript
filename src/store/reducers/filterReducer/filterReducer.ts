@@ -1,7 +1,7 @@
 import { IProduct } from './../productsReducers/ProductsTypes';
-import { bindActionCreators } from 'redux';
+
 import { FilterAction, FilterActionsEnum, IFilter } from './filterTypes';
-import { store } from '../../store';
+
 
 const ititialState: IFilter = {
   products: [],
@@ -19,6 +19,7 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
     case FilterActionsEnum.SUCCESS_LOAD_FILTER_ITEMS: {
       return {
         ...state,
+        products: action.payload.data,
         filteredProducts: action.payload.data,
         filters: {
           ...state.filters,
@@ -57,13 +58,13 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
       }
 
    
-      const updatedState = () => {
+      const updatedState = (products:IProduct[]) => {
         const filteredCategories:string[] = Object.entries(updatedFilters.category).filter(
           (item) => item[1] 
         ).map(item=>item[0]);
      
       
-        let filteredProducts = action.payload.products.filter(
+        let filteredProducts = products.filter(
           (product: IProduct): IProduct | boolean   => {
             console.log(action.payload.value)
             if(updatedFilters.text!=="")  {
@@ -74,7 +75,12 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
             }
             
           }
-        );
+        ).filter((elem:IProduct)=> {
+         
+          return elem.price <= state.filters.maxPrice && elem.price>=state.filters.minPrice
+        });
+
+
         console.log(filteredProducts, "filteredProducts after text")
         let filteredArray:any = []
           if(filteredCategories.length>0) {
@@ -82,12 +88,15 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
             
            filteredCategories.forEach((category:string)=> {
               const filtersByCategoryItems = filteredProducts.filter((item:IProduct)=>item.category===category)
-              console.log(filtersByCategoryItems, "filteredProducts")
+              console.log(filteredProducts, "filteredProducts in category")
               filteredArray = [...filteredArray, ...filtersByCategoryItems]
+     
+             
            })
           //  filteredArray.filter((elem:IProduct)=>elem.price <= state.filters.maxPrice)
           //  console.log(filteredArray, "filtered after price")
-           console.log(filteredArray, "filtered after categories")
+          filteredProducts =filteredArray
+           console.log(filteredProducts, "filtered after categories")
           }
           // else {
           //   console.log("in else")
@@ -96,19 +105,19 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
           //     return elem.price <= state.filters.maxPrice && elem.price>=state.filters.minPrice
           //   })
           // }
-          filteredArray  = filteredArray.filter((elem:IProduct)=> {
-            console.log(elem.price)
-            return elem.price <= state.filters.maxPrice && elem.price>=state.filters.minPrice
-          })
+          // filteredArray  = filteredProducts.filter((elem:IProduct)=> {
+          //   console.log(elem.price)
+          //   return elem.price <= state.filters.maxPrice && elem.price>=state.filters.minPrice
+          // })
           console.log(filteredArray, "final filter") 
-        return filteredArray
+        return filteredProducts
         
       };
      
       return {
         ...state,
         filters: updatedFilters,
-        filteredProducts: updatedState()
+        filteredProducts: updatedState(state.products)
       };
     }
     default:
