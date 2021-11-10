@@ -4,17 +4,15 @@ import styled from 'styled-components';
 import { IProduct } from '../store/reducers/productsReducers/ProductsTypes';
 import { RootState } from '../store/store';
 import { TwoThumbInputRange } from 'react-two-thumb-input-range';
-import { filterItems } from '../store/actionCreators/filterActionCreators';
-import { getCategory, getMaxPrice, getOptions } from '../helpers';
+import { filterItems, clearFilters } from '../store/actionCreators/filterActionCreators';
+import {  getMaxPrice, getOptions } from '../helpers';
 import { IFilterItems } from '../store/reducers/filterReducer/filterTypes';
-
-
+import { Button } from '.';
+import {BiSearchAlt2} from "react-icons/bi"
 interface StyledInputRange {
   variant?: 'range';
   max?: number;
 }
-
-
 
 interface IFilterState {
   price: [number, number];
@@ -28,113 +26,94 @@ export enum Filterscategory {
   price = 'price',
 }
 
+type FilterCategory = [string,boolean] 
+
 export type Filter = 'category' | 'text' | 'price';
 
 const LeftAside: React.FC = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const products = useSelector<RootState, IProduct[]>(
     (state) => state.products.products
   );
-  const {text} = useSelector<RootState, IFilterItems>(state=>state.filter.filters) 
-    console.log("text", text) 
-  const maxPrice = getMaxPrice(products)
-  const options = getOptions(products) 
-  const category = getCategory(options)
-  
+  // const options = useSelector<RootState, any>(state=>state.filter.filters.category) 
+  // console.log("options", options)
+  // console.log(Object.entries(options))
+  // const { text } = useSelector<RootState, IFilterItems>(
+  //   (state) => state.filter.filters
+  // );
 
-  const [inputValue, setInputValue] = useState<string>('');
-  const [inputState, setInputState] = useState<IFilterState>({
-    price: [0, 0],
-    searchValue: '',
-    category: category,
-  });
-
-  
+  const {text,category, minPrice,} = useSelector<RootState,any>(state=>state.filter.filters) 
+  console.log('text', text);
+  const maxPrice = getMaxPrice(products);
+  // const options = getOptions(products);
 
   const [value, setValue] = useState<[number, number]>([0, maxPrice | 200]);
 
-
-  const changeInput = (e: React.FormEvent<HTMLInputElement>, variant: Filter, 
-    ) => {
-    // if (type === 'search') {
-    //   setInputState({ ...inputState, searchValue: e.currentTarget.value });
-    // } else if (type === 'category') {
-    //   setInputState({
-    //     ...inputState,
-    //     category: {
-    //       ...inputState.category,
-    //       [e.currentTarget.value]: !inputState.category[e.currentTarget.value],
-    //     },
-    //   });
-    // } else if (type === 'price') {
-      
-    // }
-    // setInputValue(e.currentTarget.value);
-      
-      
-      if(variant === "text") {
-        const value = e.currentTarget.value
-        dispatch(filterItems({variant, value, products}))
-      }
-      else if(variant ==="category") {
-    
-        const value = e.currentTarget.name
-        console.log("value" , value)
-        dispatch(filterItems({variant, value, products})) 
-      }
-
-      // else if(variant === "price") {
-      //   const value =[]
-      //   dispatch(filterItems({variant, value}))
-      // }
-  
-    
-    console.log(inputState, "inputState")
-    console.log("nowDispatch")
+  const changeInput = (
+    e: React.FormEvent<HTMLInputElement>,
+    variant: Filter
+  ) => {
+    if (variant === 'text') {
+      const value = e.currentTarget.value;
+      dispatch(filterItems({ variant, value, products }));
+    } else if (variant === 'category') {
+      const value = e.currentTarget.name;
+      console.log('value', value);
+      dispatch(filterItems({ variant, value, products }));
+    }
   };
-
 
   const changePrice = (values: any) => {
-    const value = values
-    const variant = "price"
-    dispatch(filterItems({variant, value, products}))
+    const value = values;
+    const variant = 'price';
+    dispatch(filterItems({ variant, value, products }));
     setValue(values);
   };
+
+  const clearFiltersFields = ()=> {
+    dispatch(clearFilters(products))
+    setValue([0,maxPrice]); 
+  }
+  const displayOptions:[string, boolean][] | undefined = Object.entries(category)
+  console.log("displayOptions", displayOptions)
   return (
-    <>
-      {products && products.length > 0 && maxPrice && (
+    <AsideWrapper>
+      {products && products.length > 0 && maxPrice && Object.keys(category).length > 0 && (
         <StyledAside>
-          <fieldset>
+          <StyledFieldset>
             <InputWrapper>
               <Input
                 id="search"
                 type="text"
                 placeholder="Search"
                 value={text}
-                onChange={(e) => changeInput(e, 'text')}></Input>
+                onChange={(e) => changeInput(e, 'text')}>
+              
+                </Input>
+                <BiSearchAlt2></BiSearchAlt2>
               <Label htmlFor="search"></Label>
             </InputWrapper>
             <InputWrapper>
               <Legend>Choose category</Legend>
-              {options.map((option, index) => {
+              {displayOptions.map((option, index)=> {
+                console.log(option[1])
                 return (
                   <CheckboxWrapper key={index}>
-                    <Input
-                      type="checkbox"
-                      onChange={(e) => changeInput(e, 'category')}
-                      name={option}
-                      value={option}
-                      id={option}
-                    />
-                    <Label htmlFor={option}>{option}</Label>
-                  </CheckboxWrapper>
-                );
+                  <Input
+                    type="checkbox" 
+                     checked = {option[1]}
+                    onChange={(e) => changeInput(e, 'category')}
+                    name={option[0]}
+                    value={option[0]}
+                    id={option[0]}
+                  />
+                  <Label htmlFor={option[0]}>{option[0]}</Label>
+                </CheckboxWrapper>
+                )
               })}
             </InputWrapper>
             <InputWrapper>
-              {/* <Input id="" type="range" min={+price.minPrice} max={+price.maxPrice}  ></Input>
-          <Input id="min" value = {price.minPrice} onChange = {(e)=>changePrice(e,"minPrice")}></Input>
-          <Input id="max" value = {price.maxPrice} onChange = {(e)=>changePrice(e,"maxPrice")}></Input> */}
+            <Label htmlFor= "price">Filter by price</Label>
               <TwoThumbInputRange
                 onChange={changePrice}
                 values={value}
@@ -142,33 +121,49 @@ const LeftAside: React.FC = () => {
                 max={+`${maxPrice | 0}`}
               />
             </InputWrapper>
-          </fieldset>
+          </StyledFieldset>
+          <Button onClick = {clearFiltersFields}>Clear Filters</Button>
         </StyledAside>
       )}
-    </>
+    </AsideWrapper>
   );
 };
 
 export default LeftAside;
 
-const StyledAside = styled.aside`
-  display: flex;
-  justify-content: center;
+const AsideWrapper = styled.aside `
+  display: grid;
+  align-self: flex-start;
+  margin-top: 1rem;
+ `
+
+const StyledAside = styled.section`
+    display: grid;
+   
+
+  /* justify-content: center; */
   .css-j8gyih-TwoThumbInputRange {
-    margin-top: 3rem;
+    margin-top: 2rem;
     output {
-      /* width: 36px;
-    height: 18px; */
       top: -25px;
-      &:nth-child(1) {
-        /* left: calc(0% - 16px);  */
+      &:nth-child(2) {
+        top: 30px;
+        &:after {
+          border-width: 8px 8px 8px 8px;
+          border-color: transparent transparent #1976d2 transparent;
+          position: absolute;
+          bottom: 24px;
+          left: 50%;
+        }
       }
     }
   }
 `;
-
+const StyledFieldset = styled.fieldset `
+padding: 3rem;
+`
 const InputWrapper = styled.div<StyledInputRange>`
-  margin-top: 1rem;
+  margin-top: 3rem;
   position: relative;
   &:after,
   &:before {
@@ -184,17 +179,32 @@ const InputWrapper = styled.div<StyledInputRange>`
   &:after {
     right: 0;
   }
+  svg {
+    position: absolute;
+    bottom: 3px;
+    right: 0;
+    transition: all  0.3s ease;
+    
+  }
+
+
 `;
 
 const Input = styled.input`
   width: 100%;
+  border-radius: 5px ;
+  height: ${({type})=>type==='text'?"25px":"20px"};
+  &:focus::placeholder {
+    color: transparent
+  }
+  &:focus + svg {
+    opacity: 0;
+    border: 1px;
+  }
 `;
 
 const Label = styled.label``;
 
-const Select = styled.select`
-  width: 80%;
-`;
 
 const CheckboxWrapper = styled.div`
   display: grid;

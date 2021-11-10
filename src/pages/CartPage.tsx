@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import CartItem from '../components/CartItem';
-
 import { IProduct } from '../store/reducers/productsReducers/ProductsTypes';
 import { RootState } from '../store/store';
+
 
 const Cart = () => {
   const cart = useSelector<RootState, IProduct[]>(
@@ -16,6 +17,22 @@ const Cart = () => {
   const totalPrice = useSelector<RootState, number>(
     (state) => state.cart.totalPrice
   );
+  const history = useHistory()
+
+  useEffect(() => {
+    if(quantity===0) {
+     const timeout =  setTimeout(()=> {
+        history.push('/')
+      }, 1000)
+      return ()=> {
+        clearTimeout(timeout);
+      }
+    }
+
+
+
+    
+  }, [quantity])
   return (
     <>
     {quantity ? <StyledMain>
@@ -66,13 +83,6 @@ const Wrapper =styled.div `
   display: grid;
   align-items: center;
   justify-content: center;
-
-  /* &:nth-child(1) {
-    grid-column: 2 / 3
-  }
-  &:nth-child(2) {
-    grid-column: 3 / 4
-  } */
 
 `
 

@@ -9,3 +9,7 @@ export const filterItems = (data: IFilterPayload)=> {
 export const loadItems = (data:IProduct[])=> {
     return {type:FilterActionsEnum.SUCCESS_LOAD_FILTER_ITEMS, payload:data}
 }
+
+export const clearFilters =(data:IProduct[])=> {
+    return {type:FilterActionsEnum.CLEAR_FILTERS, payload:data}
+}

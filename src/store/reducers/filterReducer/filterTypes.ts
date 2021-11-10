@@ -24,6 +24,7 @@ export interface IFilterItems {
 export enum FilterActionsEnum {
     SUCCESS_LOAD_FILTER_ITEMS = ' SUCCESS_LOAD_FILTER_ITEMS',
     FILTER_ITEMS = 'FILTER_ITEMS',
+    CLEAR_FILTERS= "CLEAR_FILTERS"
   }
 
 export interface IFilterPayload {
@@ -47,4 +48,9 @@ export interface LoadDataAction {
     }
 }
 
-export type FilterAction = FilterItemsAction | LoadDataAction 
+export interface ClearFiltersAction {
+  type: FilterActionsEnum.CLEAR_FILTERS;
+  payload: IProduct[]
+}
+
+export type FilterAction = FilterItemsAction | LoadDataAction  | ClearFiltersAction
