@@ -9,6 +9,7 @@ interface IButton {
   children: React.ReactNode;
   padding?: string;
   marginBottom?: string;
+  marginTop?: string,
   disabled?:boolean 
 
   onClick: () => void;
@@ -20,6 +21,7 @@ interface IStyledButton {
   hoverColor?: string;
   hoverBgColor?: string;
   marginBottom?: string;
+  marginTop?: string,
 }
 
 const Button: React.FC<IButton> = ({
@@ -30,7 +32,8 @@ const Button: React.FC<IButton> = ({
   hoverColor,
   hoverBgColor,
   onClick,
-  disabled 
+  disabled,
+  marginTop 
 }) => {
   return (
     <div>
@@ -42,6 +45,7 @@ const Button: React.FC<IButton> = ({
         hoverBgColor={hoverBgColor}
         onClick= {onClick}
         disabled = {disabled}
+        marginTop= {marginTop}
         >
         {children}{' '}
         
@@ -64,6 +68,7 @@ const StyledButton = styled.button<IStyledButton>`
   padding: 7px 10px;
   margin: 0 auto 1rem;
   margin-bottom: ${({ marginBottom }) => marginBottom || ''};
+  margin-top: ${({marginTop})=>marginTop || "0rem"};
   transition: all ease 0.6s;
   &:hover {
       cursor: pointer;

@@ -122,7 +122,7 @@ const LeftAside: React.FC = () => {
               />
             </InputWrapper>
           </StyledFieldset>
-          <Button onClick = {clearFiltersFields}>Clear Filters</Button>
+          <Button marginTop = "1rem" hoverColor = "white"  hoverBgColor = "#3b3b6c" onClick = {clearFiltersFields}>Clear Filters</Button>
         </StyledAside>
       )}
     </AsideWrapper>
@@ -181,7 +181,7 @@ const InputWrapper = styled.div<StyledInputRange>`
   }
   svg {
     position: absolute;
-    bottom: 3px;
+    bottom: 6px;
     right: 0;
     transition: all  0.3s ease;
     
