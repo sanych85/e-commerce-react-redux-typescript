@@ -10,6 +10,7 @@ import ProductsList from '../components/ProductsList';
 import styled from 'styled-components';
 import LeftAside from '../components/LeftAside';
 import { Spinner } from '../components';
+import Sorting from '../components/Sorting';
 const Home = () => {
   const products = useSelector<RootState, IProduct[]>(
     (state) => state.products.products
@@ -29,6 +30,7 @@ const Home = () => {
     <Main>
       <LeftAside />
       <InfoSection>
+        <Sorting/>
           {loading ? (
             <Spinner/>
           ) : filteredProducts.length > 0 ? (
