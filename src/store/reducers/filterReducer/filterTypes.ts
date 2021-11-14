@@ -9,8 +9,10 @@ export interface IFilter {
     category: any;
     minPrice: number;
     maxPrice: number;
+    
    
   };
+  sortDirection: boolean
 
 }
 
@@ -24,9 +26,18 @@ export interface IFilterItems {
 export enum FilterActionsEnum {
     SUCCESS_LOAD_FILTER_ITEMS = ' SUCCESS_LOAD_FILTER_ITEMS',
     FILTER_ITEMS = 'FILTER_ITEMS',
-    CLEAR_FILTERS= "CLEAR_FILTERS"
+    CLEAR_FILTERS= "CLEAR_FILTERS",
+    SORT_ITEMS= "SORT_ITEMS"
   }
 
+export enum SortEnum {
+  price = "price",
+  rate ="rate",
+  name = "name",
+  count= "count"
+}
+export type Filter = 'category' | 'text' | 'price';
+export type SortingType = "price" |  "name" | "rate" | "count"
 export interface IFilterPayload {
   variant: string;
   value: any;
@@ -52,5 +63,10 @@ export interface ClearFiltersAction {
   type: FilterActionsEnum.CLEAR_FILTERS;
   payload: IProduct[]
 }
+export type sortPayload = SortEnum.name | SortEnum.price | SortEnum.rate | SortEnum.count  
+export interface SortItems {
+  type: FilterActionsEnum.SORT_ITEMS
+  payload: sortPayload
+}
 
-export type FilterAction = FilterItemsAction | LoadDataAction  | ClearFiltersAction
+export type FilterAction = FilterItemsAction | LoadDataAction  | ClearFiltersAction | SortItems 

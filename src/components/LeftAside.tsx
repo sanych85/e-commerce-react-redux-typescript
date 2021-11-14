@@ -6,7 +6,7 @@ import { RootState } from '../store/store';
 import { TwoThumbInputRange } from 'react-two-thumb-input-range';
 import { filterItems, clearFilters } from '../store/actionCreators/filterActionCreators';
 import {  getMaxPrice, getOptions } from '../helpers';
-import { IFilterItems } from '../store/reducers/filterReducer/filterTypes';
+import { IFilterItems, Filter } from '../store/reducers/filterReducer/filterTypes';
 import { Button } from '.';
 import {BiSearchAlt2} from "react-icons/bi"
 interface StyledInputRange {
@@ -28,7 +28,7 @@ export enum Filterscategory {
 
 type FilterCategory = [string,boolean] 
 
-export type Filter = 'category' | 'text' | 'price';
+
 
 const LeftAside: React.FC = () => {
   const dispatch = useDispatch();

@@ -1,7 +1,7 @@
-import { getCategory } from '../../../helpers';
+import { getCategory, sortItem } from '../../../helpers';
 import { IProduct } from './../productsReducers/ProductsTypes';
 
-import { FilterAction, FilterActionsEnum, IFilter } from './filterTypes';
+import { FilterAction, FilterActionsEnum, IFilter, SortEnum } from './filterTypes';
 
 const ititialState: IFilter = {
   products: [],
@@ -12,6 +12,7 @@ const ititialState: IFilter = {
     minPrice: 0,
     maxPrice: 1000,
   },
+  sortDirection:false
 };
 
 export const filterReducer = (state = ititialState, action: FilterAction) => {
@@ -120,12 +121,24 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
         ...state,
         filteredProducts: action.payload,
         filters: {
-          text: '',
+          text: '', 
           category: category,
           minPrice: 0,
           maxPrice: 200,
         },
       };
+    }
+
+    case FilterActionsEnum.SORT_ITEMS: {
+      if(action.payload === "price" || action.payload ==="rate" || action.payload  === "count") {
+        return {
+          ...state, sortDirection:!state.sortDirection, filteredProducts: sortItem(state.filteredProducts, action.payload, state.sortDirection) 
+        }
+      
+      }
+      return state
+
+     
     }
     default:
       return state;

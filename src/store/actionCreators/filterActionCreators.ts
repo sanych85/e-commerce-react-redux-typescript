@@ -1,5 +1,5 @@
 import { IProduct } from './../reducers/productsReducers/ProductsTypes';
-import { IFilterPayload, FilterActionsEnum } from './../reducers/filterReducer/filterTypes';
+import { IFilterPayload, FilterActionsEnum, SortEnum, sortPayload, Filter, SortingType } from './../reducers/filterReducer/filterTypes';
 
 
 export const filterItems = (data: IFilterPayload)=> {
@@ -12,4 +12,8 @@ export const loadItems = (data:IProduct[])=> {
 
 export const clearFilters =(data:IProduct[])=> {
     return {type:FilterActionsEnum.CLEAR_FILTERS, payload:data}
+}
+
+export const sortItems =(type:SortingType )=> {
+ return {type:FilterActionsEnum.SORT_ITEMS, payload:type}
 }

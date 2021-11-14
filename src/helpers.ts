@@ -1,5 +1,6 @@
 
 
+import { SortingType } from './store/reducers/filterReducer/filterTypes';
 import { IProduct } from './store/reducers/productsReducers/ProductsTypes';
 
 
@@ -88,4 +89,18 @@ export const getMaxPrice = (products:IProduct[])=> {
   return Math.round(
     products.map((item) => item.price).sort((a, b) => b - a)[0]
   );
+}
+
+export const sortItem = (arr:IProduct[], type:"price" | "count" | "rate", direction: boolean)=> {
+ return arr.sort((a,b)=>{
+   if(type === "price") {
+    return direction? a[type]-b[type]:b[type] - a[type]
+   }
+   else if(type==="count") {
+    return direction? a.rating[type]-b.rating[type]:b.rating[type] - a.rating[type]
+   }
+   else {
+    return direction? a.rating[type]-b.rating[type]:b.rating[type] - a.rating[type]
+   } 
+ })  
 }

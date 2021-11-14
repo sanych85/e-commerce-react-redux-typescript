@@ -7,11 +7,12 @@ import styled from 'styled-components';
 export interface IProductList {
    products: IProduct[]
    loading: boolean
+   sortDirection: boolean
 }
 
 
-const ProductsList:React.FC<IProductList> = ({products, loading}) => { 
-    console.log(products)
+const ProductsList:React.FC<IProductList> = ({products, loading, sortDirection}) => { 
+    console.log("rendering")
     if(loading) {
         return <div>Loading</div>
     }
