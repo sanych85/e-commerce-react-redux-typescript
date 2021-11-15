@@ -12,7 +12,8 @@ const ititialState: IFilter = {
     minPrice: 0,
     maxPrice: 1000,
   },
-  sortDirection:false
+  sortDirection:"up",
+  sortBy:"price"
 };
 
 export const filterReducer = (state = ititialState, action: FilterAction) => {
@@ -131,12 +132,21 @@ export const filterReducer = (state = ititialState, action: FilterAction) => {
 
     case FilterActionsEnum.SORT_ITEMS: {
       if(action.payload === "price" || action.payload ==="rate" || action.payload  === "count") {
+        
         return {
-          ...state, sortDirection:!state.sortDirection, filteredProducts: sortItem(state.filteredProducts, action.payload, state.sortDirection) 
+          ...state, sortBy: action.payload, filteredProducts: sortItem(state.filteredProducts, action.payload, state.sortDirection),sortDirection:state.sortDirection==="up"?"down" : "up" 
         }
       
       }
-      return state
+
+      else  {
+       
+        return {
+          ...state, sortBy: action.payload, filteredProducts: sortItem(state.filteredProducts, action.payload, state.sortDirection),sortDirection:state.sortDirection==="up"?"down" : "up" 
+        }
+      }
+     
+      
 
      
     }

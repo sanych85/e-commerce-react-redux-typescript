@@ -1,6 +1,6 @@
 
 
-import { SortingType } from './store/reducers/filterReducer/filterTypes';
+import { SortDirectionType, SortingType } from './store/reducers/filterReducer/filterTypes';
 import { IProduct } from './store/reducers/productsReducers/ProductsTypes';
 
 
@@ -91,16 +91,39 @@ export const getMaxPrice = (products:IProduct[])=> {
   );
 }
 
-export const sortItem = (arr:IProduct[], type:"price" | "count" | "rate", direction: boolean)=> {
- return arr.sort((a,b)=>{
+export const sortItem = (arr:IProduct[], type:SortingType, direction: string)=> {
+ return arr.sort((a:IProduct,b:IProduct)=>{
    if(type === "price") {
-    return direction? a[type]-b[type]:b[type] - a[type]
+    return direction==="up"? a[type]-b[type]: b[type] - a[type]
    }
    else if(type==="count") {
-    return direction? a.rating[type]-b.rating[type]:b.rating[type] - a.rating[type]
+    return direction==="up"? a.rating[type]-b.rating[type]:b.rating[type] - a.rating[type]
+   }
+   else if (type==="rate") {
+    return direction==="up"? a.rating[type]-b.rating[type]:b.rating[type] - a.rating[type]
    }
    else {
-    return direction? a.rating[type]-b.rating[type]:b.rating[type] - a.rating[type]
-   } 
+      
+    if(direction==="up") {
+      if(a.title<b.title) {
+        return -1
+      }
+      else if(a.title>b.title) {
+        return 1
+      }
+      return 0
+    }
+    else {
+      if(a.title>b.title) {
+        return -1
+      }
+      else if(a.title<b.title) {
+        return 1
+      }
+      return 0
+    }
+   }
+
+
  })  
 }

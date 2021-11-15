@@ -1,6 +1,8 @@
 
 import { IProduct } from './../productsReducers/ProductsTypes';
-
+export type Filter = 'category' | 'text' | 'price';
+export type SortingType = "price" |   "rate" | "count" | "name" 
+export type SortDirectionType = "up" | "down"
 export interface IFilter {
   products: IProduct[];
   filteredProducts: IProduct[];
@@ -12,8 +14,8 @@ export interface IFilter {
     
    
   };
-  sortDirection: boolean
-
+  sortDirection: string
+  sortBy:SortingType
 }
 
 export interface IFilterItems {
@@ -36,8 +38,8 @@ export enum SortEnum {
   name = "name",
   count= "count"
 }
-export type Filter = 'category' | 'text' | 'price';
-export type SortingType = "price" |  "name" | "rate" | "count"
+
+
 export interface IFilterPayload {
   variant: string;
   value: any;

@@ -5,13 +5,13 @@ import styled from 'styled-components';
 
 
 export interface IProductList {
-   products: IProduct[]
+   products: IProduct[],
    loading: boolean
-   sortDirection: boolean
+   sorts:string
 }
 
 
-const ProductsList:React.FC<IProductList> = ({products, loading, sortDirection}) => { 
+const ProductsList:React.FC<IProductList> = ({products, loading,sorts}) => { 
     console.log("rendering")
     if(loading) {
         return <div>Loading</div>

@@ -18,9 +18,7 @@ const Home = () => {
   const filteredProducts = useSelector<RootState, IProduct[]>(
     (state) => state.filter.filteredProducts
   );
-  const sortDirection = useSelector<RootState, boolean>(
-    (state) => state.filter.sortDirection
-  );
+  const sortDirection = useSelector<RootState, string>((state) => state.filter.sortDirection);
   const loading = useSelector<RootState, boolean>(
     (state) => state.products.loading
   );
@@ -38,7 +36,7 @@ const Home = () => {
           {loading ? (
             <Spinner/>
           ) : filteredProducts.length > 0 ? (
-            <ProductsList sortDirection ={sortDirection} products={filteredProducts} loading={loading} />
+            <ProductsList sorts= {sortDirection}  products={filteredProducts} loading={loading} />
           ) : (
             <h2>There are no products for your request</h2>
           )}
