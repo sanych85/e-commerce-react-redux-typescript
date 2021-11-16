@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import LeftAside from '../components/LeftAside';
 import { Spinner } from '../components';
 import Sorting from '../components/Sorting';
+import Pagination from '../components/Pagination';
 const Home = () => {
   const products = useSelector<RootState, IProduct[]>(
     (state) => state.products.products
@@ -18,7 +19,9 @@ const Home = () => {
   const filteredProducts = useSelector<RootState, IProduct[]>(
     (state) => state.filter.filteredProducts
   );
-  const sortDirection = useSelector<RootState, string>((state) => state.filter.sortDirection);
+  const sortDirection = useSelector<RootState, string>(
+    (state) => state.filter.sortDirection
+  );
   const loading = useSelector<RootState, boolean>(
     (state) => state.products.loading
   );
@@ -27,23 +30,27 @@ const Home = () => {
   useEffect(() => {
     dispatch(fetchProducts());
   }, []);
-  
+
   return (
     <Main>
       <LeftAside />
       <InfoSection>
-        <Sorting/>
-          {loading ? (
-            <Spinner/>
-          ) : filteredProducts.length > 0 ? (
-            <ProductsList sorts= {sortDirection}  products={filteredProducts} loading={loading} />
-          ) : (
-            <h2>There are no products for your request</h2>
-          )}
+        {loading ? (
+          <Spinner />
+        ) : filteredProducts.length > 0 ? (
+          <>
+            <Sorting />
+            <Pagination/>
+            <ProductsList
+              sorts={sortDirection}
+              products={filteredProducts}
+              loading={loading}
+            />
+          </>
+        ) : (
+          <h2>There are no products for your request</h2>
+        )}
       </InfoSection>
-      
-
-      
     </Main>
   );
 };
@@ -54,12 +61,11 @@ const Main = styled.main`
   display: grid;
   grid-template-columns: 1fr 5fr 1fr;
   justify-items: center;
-    align-items: center;
+  align-items: center;
 `;
 
-const InfoSection = styled.div `
-    display: grid;
-    justify-items: center;
-    align-items: center;
-
-`
+const InfoSection = styled.div`
+  display: grid;
+  justify-items: center;
+  align-items: center;
+`;
