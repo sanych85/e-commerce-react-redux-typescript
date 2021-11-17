@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Heading, { HeadingTypes } from '../components/Heading';
 import { fetchProducts } from '../store/actionCreators/productsActionCreator';
@@ -13,9 +13,9 @@ import { Spinner } from '../components';
 import Sorting from '../components/Sorting';
 import Pagination from '../components/Pagination';
 const Home = () => {
-  const products = useSelector<RootState, IProduct[]>(
-    (state) => state.products.products
-  );
+  // const products = useSelector<RootState, IProduct[]>(
+  //   (state) => state.products.products
+  // );
   const filteredProducts = useSelector<RootState, IProduct[]>(
     (state) => state.filter.filteredProducts
   );
@@ -25,12 +25,36 @@ const Home = () => {
   const loading = useSelector<RootState, boolean>(
     (state) => state.products.loading
   );
-  console.log(products);
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [paginatedItems, setPaginatedItems] = useState<IProduct[]>(filteredProducts) 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchProducts());
   }, []);
+  useEffect(()=> {
+    setPaginatedItems(filteredProducts) 
+  },[filteredProducts,sortDirection])
+  const itemsQuantityOnPage = 6
+const pageQuantity = Math.round(filteredProducts.length/itemsQuantityOnPage)
+console.log("filteredProducts",filteredProducts)
+console.log( "pageQuantity",pageQuantity)
 
+const paginationItems = Array.from({length: pageQuantity}, (v, k) => k+1) 
+
+const showPaginationItems = (item:number)=> {
+    const itemsAfterPagination =  filteredProducts.filter((product, idx)=> {
+      if(idx>=(item-1)*itemsQuantityOnPage && idx<item*itemsQuantityOnPage) {
+        return product
+      }
+      else return false 
+    })
+
+    setPaginatedItems(itemsAfterPagination)
+    setCurrentPage(item)
+
+   
+}
+console.log("paginatedItems", paginatedItems)
   return (
     <Main>
       <LeftAside />
@@ -40,10 +64,10 @@ const Home = () => {
         ) : filteredProducts.length > 0 ? (
           <>
             <Sorting />
-            <Pagination/>
+            <Pagination showPaginationItems = {showPaginationItems} currentPage = {currentPage}/>
             <ProductsList
               sorts={sortDirection}
-              products={filteredProducts}
+              products={paginatedItems}
               loading={loading}
             />
           </>

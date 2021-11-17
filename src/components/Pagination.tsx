@@ -3,8 +3,14 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { IProduct } from '../store/reducers/productsReducers/ProductsTypes';
 import { RootState } from '../store/store';
+import PaginationItem from './PaginationItem';
 
-const Pagination = () => {
+interface Ipagination {
+    currentPage:number
+    showPaginationItems:(item:number)=>void 
+}
+
+const Pagination:React.FC<Ipagination> = ({showPaginationItems,currentPage}) => {
 const filteredProducts = useSelector<RootState, IProduct[]>(
         (state) => state.filter.filteredProducts
 );
@@ -17,7 +23,7 @@ console.log(paginationItems)
     return (
         <PaginationWrapper>
             {paginationItems.map(item=> {
-                return <PaginationItem key = {item}>{item}</PaginationItem>
+                return <PaginationItem key = {item} item = {item} showPaginationItems ={showPaginationItems} currentPage = {currentPage}>{item}</PaginationItem>
             })}
         </PaginationWrapper>
     )
@@ -29,12 +35,11 @@ const PaginationWrapper = styled.section `
 display: grid;
 grid-auto-columns: min-content;
 grid-auto-flow: column;
+gap: 0.5rem;
+margin: 1rem 0rem;
 `
 
 
-const PaginationItem = styled.div `
 
-border: 1px solid #000;
-`
 
 
